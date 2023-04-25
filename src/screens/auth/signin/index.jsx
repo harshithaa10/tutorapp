@@ -1,40 +1,84 @@
 import React, {useState} from 'react';
-import {StyleSheet, Text, View, Image, TextInput,StatusBar,TouchableOpacity} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  StatusBar,
+  TouchableOpacity,
+} from 'react-native';
+import TextInput from '../../../components/partial/AppInput';
+import Button from '../../../components/partial/AppButton';
+import {theme} from '../../../utils/data/theme';
+import {emailValidator, passwordValidator} from '../../../helpers/validator';
 
 const Signin = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [values, setValues] = useState({
+    email: '',
+    password: '',
+    emailerror: '',
+    passworderror: '',
+  });
+  
+
+  const onLoginSubmit = () => {
+    const emailError = emailValidator(values.email);
+    const passwordError = passwordValidator(values.password);
+    if (emailError) {
+      setValues({...values, emailerror: emailError});
+      return;
+    }
+    if (passwordError) {
+      setValues({...values, passworderror: passwordError});
+      return;
+    }
+  };
 
   return (
     <View style={styles.container}>
-      <Image style={styles.logoimage} source={require('../../../assets/images/logo.png')} />
+      <Image
+        style={styles.logoimage}
+        source={require('../../../assets/images/logo.png')}
+      />
       <StatusBar style="auto" />
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.TextInput}
-          placeholder="Email."
-          placeholderTextColor="#003f5c"
-          onChangeText={email => setEmail(email)}
-        />
+      <TextInput
+        label="Email"
+        returnKeyType="next"
+        value={values.email}
+        onChangeText={value => setValues({...values, email: value, emailerror: ''})}
+        error={!!values.emailerror}
+        errorText={values.emailerror}
+        autoCapitalize="none"
+        autoCompleteType="email"
+        textContentType="emailAddress"
+        keyboardType="email-address"
+      />
+      <TextInput
+        label="Password"
+        returnKeyType="done"
+        value={values.password}
+        onChangeText={value =>
+          setValues({...values, password: value, passworderror: ''})
+        }
+        error={!!values.passworderror}
+        errorText={values.passworderror}
+        secureTextEntry={true}
+      />
+      <View style={styles.forgotPassword}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('ResetPasswordScreen')}>
+          <Text style={styles.forgot}>Forgot your password?</Text>
+        </TouchableOpacity>
       </View>
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.TextInput}
-          placeholder="Password."
-          placeholderTextColor="#003f5c"
-          secureTextEntry={true}
-          onChangeText={password => setPassword(password)}
-        />
+      <Button mode="contained" onPress={onLoginSubmit}>
+        Login
+      </Button>
+      <View style={styles.row}>
+        <Text>Don’t have an account? </Text>
+        <TouchableOpacity>
+          <Text style={styles.link}>Sign up</Text>
+        </TouchableOpacity>
       </View>
-      <TouchableOpacity style={styles.loginBtn}>
-        <Text style={styles.loginText}>LOGIN</Text>
-      </TouchableOpacity>
-      <TouchableOpacity>
-        <Text style={styles.forgot_button}>Forgot Password?</Text>
-      </TouchableOpacity>
-      <TouchableOpacity>
-        <Text style={styles.forgot_button}>Don't have an account? Sign up</Text>
-      </TouchableOpacity>
     </View>
   );
 };
@@ -45,38 +89,38 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+    padding: 30,
   },
-  inputView: {
-    backgroundColor: '#E7E9EB',
-    borderRadius: 30,
-    width: '70%',
-    height: 45,
-    marginBottom: 20,
-    alignItems: 'center',
+  forgotPassword: {
+    width: '100%',
+    alignItems: 'flex-end',
+    marginBottom: 24,
   },
-  TextInput: {
-    height: 50,
-    flex: 1,
-    padding: 10,
-    marginLeft: 20,
+  row: {
+    flexDirection: 'row',
+    marginTop: 4,
   },
-  forgot_button: {
-    height: 30,
-    marginBottom: 30,
+  forgot: {
+    fontSize: 13,
+    color: theme.colors.secondary,
   },
-  loginBtn: {
-    width: '80%',
-    borderRadius: 25,
-    height: 50,
-    alignItems: 'center',
+  link: {
+    fontWeight: 'bold',
+    color: theme.colors.primary,
+  },
+  loginText: {
+    color: '#fff',
+  },
+  logoimage: {
+    paddingHorizontal: 10,
+    height: 110,
+    width: '50%',
     justifyContent: 'center',
-    marginTop: 30,
-    backgroundColor: '#1A73E8',
+    resizeMode: 'contain',
+    alignItems: 'center',
+    alignSelf: 'center',
+    marginBottom: 8,
   },
-  loginText:{
-    color:'#fff'
-  },
-  logoimage:{flex:1, flexDirection:"row", paddingHorizontal:10, height:100, width:'50%',justifyContent:"center",resizeMode:'contain',alignItems:'center',alignSelf:"center"},
 });
 
 export default Signin;
