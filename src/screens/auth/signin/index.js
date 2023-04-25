@@ -6,13 +6,18 @@ import {
   Image,
   StatusBar,
   TouchableOpacity,
+  Alert,
+  ActivityIndicator,
 } from 'react-native';
 import TextInput from '../../../components/partial/AppInput';
 import Button from '../../../components/partial/AppButton';
 import {theme} from '../../../utils/data/theme';
 import {emailValidator, passwordValidator} from '../../../helpers/validator';
+import {login} from '../../../services/auth-services';
+import {MD2Colors} from 'react-native-paper';
 
 const Signin = ({navigation}) => {
+  const [loader, setLoader] = useState(false);
   const [values, setValues] = useState({
     email: '',
     password: '',
@@ -20,7 +25,21 @@ const Signin = ({navigation}) => {
     passwordError: '',
   });
 
-  const onLoginSubmit = ({navigation}) => {
+  const loginSubmit = async () => {
+    setLoader(true);
+    try {
+      const result = await login(values.email, values.password);
+      if (result.status) {
+        navigation.navigate();
+      }
+      setLoader(false);
+    } catch (err) {
+      setLoader(false);
+      // console.warn(JSON.stringify(err));
+      Alert.alert('failed to login');
+    }
+  };
+  const onLoginSubmit = async () => {
     const emailError = emailValidator(values.email);
     const passwordError = passwordValidator(values.password);
     if (emailError) {
@@ -31,8 +50,18 @@ const Signin = ({navigation}) => {
       setValues({...values, passwordError: passwordError});
       return;
     }
-    console.log(values);
+    await loginSubmit();
   };
+
+  if (loader) {
+    return (
+      <ActivityIndicator
+        style={styles.loader}
+        animating={true}
+        color={MD2Colors.red800}
+      />
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -122,6 +151,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'center',
     marginBottom: 8,
+  },
+  loader: {
+    flex: 1,
+    justifyContent: 'center',
+    alignContent: 'center',
   },
 });
 
