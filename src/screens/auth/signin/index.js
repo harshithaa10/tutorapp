@@ -20,7 +20,7 @@ const Signin = ({navigation}) => {
     passwordError: '',
   });
 
-  const onLoginSubmit = ({navi}) => {
+  const onLoginSubmit = ({navigation}) => {
     const emailError = emailValidator(values.email);
     const passwordError = passwordValidator(values.password);
     if (emailError) {
@@ -36,7 +36,7 @@ const Signin = ({navigation}) => {
   return (
     <View style={styles.container}>
       <Image
-        style={styles.logoimage}
+        style={styles.logoImage}
         source={require('../../../assets/images/logo.png')}
       />
       <StatusBar style="auto" />
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
   loginText: {
     color: '#fff',
   },
-  logoimage: {
+  logoImage: {
     paddingHorizontal: 10,
     height: 110,
     width: '50%',
