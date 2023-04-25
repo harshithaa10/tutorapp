@@ -31,6 +31,7 @@ const Signin = ({navigation}) => {
       setValues({...values, passwordError: passwordError});
       return;
     }
+    console.log(values);
   };
 
   return (
