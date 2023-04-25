@@ -12,24 +12,23 @@ import Button from '../../../components/partial/AppButton';
 import {theme} from '../../../utils/data/theme';
 import {emailValidator, passwordValidator} from '../../../helpers/validator';
 
-const Signin = () => {
+const Signin = ({navigation}) => {
   const [values, setValues] = useState({
     email: '',
     password: '',
-    emailerror: '',
-    passworderror: '',
+    emailError: '',
+    passwordError: '',
   });
-  
 
-  const onLoginSubmit = () => {
+  const onLoginSubmit = ({navi}) => {
     const emailError = emailValidator(values.email);
     const passwordError = passwordValidator(values.password);
     if (emailError) {
-      setValues({...values, emailerror: emailError});
+      setValues({...values, emailError: emailError});
       return;
     }
     if (passwordError) {
-      setValues({...values, passworderror: passwordError});
+      setValues({...values, passwordError: passwordError});
       return;
     }
   };
@@ -45,9 +44,11 @@ const Signin = () => {
         label="Email"
         returnKeyType="next"
         value={values.email}
-        onChangeText={value => setValues({...values, email: value, emailerror: ''})}
-        error={!!values.emailerror}
-        errorText={values.emailerror}
+        onChangeText={value =>
+          setValues({...values, email: value, emailError: ''})
+        }
+        error={!!values.emailError}
+        errorText={values.emailError}
         autoCapitalize="none"
         autoCompleteType="email"
         textContentType="emailAddress"
@@ -58,10 +59,10 @@ const Signin = () => {
         returnKeyType="done"
         value={values.password}
         onChangeText={value =>
-          setValues({...values, password: value, passworderror: ''})
+          setValues({...values, password: value, passwordError: ''})
         }
-        error={!!values.passworderror}
-        errorText={values.passworderror}
+        error={!!values.passwordError}
+        errorText={values.passwordError}
         secureTextEntry={true}
       />
       <View style={styles.forgotPassword}>
