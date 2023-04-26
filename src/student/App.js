@@ -4,7 +4,6 @@ import {IconButton} from 'react-native-paper';
 import {logoutHandler} from '../store/login-slice';
 import {useDispatch} from 'react-redux';
 const Stack = createNativeStackNavigator();
-import {theme} from '../utils/data/theme';
 
 const App = () => {
   const reduxDispatch = useDispatch();
@@ -16,12 +15,7 @@ const App = () => {
       initialRouteName="StudentDashboard"
       screenOptions={{
         headerRight: () => (
-          <IconButton
-            icon="logout"
-            iconColor={theme.colors.primary}
-            size={20}
-            onPress={logout}
-          />
+          <IconButton icon="logout" size={20} onPress={logout} />
         ),
       }}>
       <Stack.Screen name="StudentDashboard" component={dashboard} />
