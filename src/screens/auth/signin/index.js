@@ -15,8 +15,11 @@ import {theme} from '../../../utils/data/theme';
 import {emailValidator, passwordValidator} from '../../../helpers/validator';
 import {login} from '../../../services/auth-services';
 import {MD2Colors} from 'react-native-paper';
+import {useDispatch} from 'react-redux';
+import {loginHandler} from '../../../store/login-slice';
 
 const Signin = ({navigation}) => {
+  const dispatch = useDispatch();
   const [loader, setLoader] = useState(false);
   const [values, setValues] = useState({
     email: '',
@@ -30,7 +33,16 @@ const Signin = ({navigation}) => {
     try {
       const result = await login(values.email, values.password);
       if (result.status) {
-        navigation.navigate();
+        dispatch(
+          loginHandler({
+            token: result.token,
+            userRole: result.data.user_role,
+            name: result.data.name,
+            phone: result.data.phone,
+            email: result.data.email,
+            isPlanExpired: String(result.plan_expired),
+          }),
+        );
       }
       setLoader(false);
     } catch (err) {
