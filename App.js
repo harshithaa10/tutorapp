@@ -1,18 +1,21 @@
 import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import UserLogInScreen from './src/screens/auth/signin';
-import {Provider, useDispatch} from 'react-redux';
+import {Provider, useDispatch, useSelector} from 'react-redux';
 import store from './src/store';
 import Tutor from './src/tutor/App';
 import Subtutor from './src/subtutor/App';
 import Student from './src/student/App';
 import {useEffect} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {logoutHandler} from './src/store/login-slice';
-
+import {
+  loginSelector,
+  logoutHandler,
+  resetTimer,
+} from './src/store/login-slice';
+import {Text} from 'react-native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 const Stack = createNativeStackNavigator();
-
-const App = () => {
+function AuthStack() {
   const rdxDispatch = useDispatch();
   // const location = useLocation();
 
@@ -37,17 +40,28 @@ const App = () => {
     rdxDispatch(resetTimer());
   }); // eslint-disable-line
 
-  const {showLoader} = useLoading();
-
   const {isLoggedIn, isPlanExpired, userRole} = useSelector(loginSelector);
+  console.log(isLoggedIn, isPlanExpired, userRole);
   return (
-    <Provider store={store}>
-      <NavigationContainer>
-        {/*<Stack.Navigator>*/}
-        {/*  <Stack.Screen name="Login" component={UserLogInScreen} />*/}
-        {/*</Stack.Navigator>*/}
-      </NavigationContainer>
-    </Provider>
+    <NavigationContainer>
+      {isLoggedIn && userRole === 'tutor' && <Tutor />}
+      {isLoggedIn && userRole === 'subtutor' && <Subtutor />}
+      {isLoggedIn && userRole === 'student' && <Student />}
+      {!isLoggedIn && (
+        <Stack.Navigator>
+          <Stack.Screen name="Login" component={UserLogInScreen} />
+        </Stack.Navigator>
+      )}
+    </NavigationContainer>
+  );
+}
+const App = () => {
+  return (
+    <>
+      <Provider store={store}>
+        <AuthStack />
+      </Provider>
+    </>
   );
 };
 
