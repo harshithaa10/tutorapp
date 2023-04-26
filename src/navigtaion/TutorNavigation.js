@@ -9,8 +9,8 @@ const Drawer = createDrawerNavigator();
 const TutorNavigation = () => {
   return (
     <Drawer.Navigator>
-      <Drawer.Screen name="Feed" component={Feed} />
-      <Drawer.Screen name="Article" component={Article} />
+      <Drawer.Screen name="Dashboard" component={Dashboard} />
+      <Drawer.Screen name="Profile" component={Profile} />
     </Drawer.Navigator>
   );
 };

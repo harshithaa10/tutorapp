@@ -15,7 +15,7 @@ const FrontNavigation = () => {
         <Stack.Screen name="Signup" component={SignUp} />
         <Stack.Screen name="ForgetPassword" component={ForgetPassword} />
       </Stack.Navigator>
-      </NavigationContainer>
+    </NavigationContainer>
   );
 };
 
